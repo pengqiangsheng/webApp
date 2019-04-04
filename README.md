@@ -4,7 +4,7 @@
 </br>
 # 部署方法分为两种（Git 钩子和 Web 钩子）
 
-## 1.Web 钩子方法 [源码](http://www.gitku.cn:8089/pqs/web/src/master/webhooks)
+## 1.Web 钩子方法 [源码](http://www.gitku.cn:8089/web/webApp/src/master/webhooks)
 
 ### 这种方法比较简单，不用申请钩子权限,步骤如下
 
