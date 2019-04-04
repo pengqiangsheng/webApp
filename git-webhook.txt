@@ -1,0 +1,32 @@
+
+===============================================pqs在2019-04-02T06:48:19Z推送了web
+deploying the web app
+web
+/var/gogs/nginx/html/pqs
+http://47.100.35.33:8089/pqs/web.git
+文件夹存在
+repo存在
+Updating 7e6eae3..ce5f894
+Fast-forward
+ README.md  |  4 ++--
+ index.html | 29 ++++++++++++++++++++++++++++-
+ 2 files changed, 30 insertions(+), 3 deletions(-)
+web server pull at webserver at time: Tue Apr  2 14:50:20 CST 2019.
+访问地址：http://gitku.cn:8083/pqs/web/index.html
+================================================
+
+================================================pqs在2019-04-02T06:50:19Z推送了web
+===============================================
+deploying the web app
+web
+/var/gogs/nginx/html/pqs
+http://47.100.35.33:8089/pqs/web.git
+文件夹存在
+repo存在
+Updating ce5f894..8fbd954
+Fast-forward
+ index.html | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
+web server pull at webserver at time: Tue Apr  2 14:57:54 CST 2019.
+访问地址：http://gitku.cn:8083/pqs/web/index.html
+================================================

@@ -1,82 +1,40 @@
-# 一个轻量级 web 应用自动部署的介绍文档
+## web 钩子推送部署流程
 
-</br>
-</br>
-# 部署方法分为两种（Git 钩子和 Web 钩子）
+1.gogs 收到 git push 推送命令</br> 2.触发 web 钩子向指定的 url 发送一个 post 请求</br>
+3.webhook.php 收到这个 post 请求</br>
+4.webhook.php 解析数据，获取你的 repo，username，repo_http_url</br>
+5.webhook.php 把这三个参数传递给 deploy.sh 并执行，并生成日志写入 git-webhook.txt</br>
+6.deploy.sh 收到参数后开始执行命令，进入相应的目录，推送代码到 Nginx 上
 
-## 1.Web 钩子方法 [源码](http://www.gitku.cn:8089/pqs/web/src/master/webhooks)
+## 注意事项
 
-### 这种方法比较简单，不用申请钩子权限,步骤如下
+1.deploy.sh 脚本要设置 sudo 权限，要判断具体是哪个用户在执行 webhook.php，本项目中的是 apache [怎么测试？](#判断哪个用户在执行-webhookphp)
 
-- 1.创建一个 repo
-- 2.然后放上你的代码
-- 3.仓库设置 => 管理 web 钩子 => 添加 web 钩子（gogs） => 填写推送地址、数据格式、密钥文本（放空）
-- 4.推送你的代码, 当你推送完成的时候就会出发 web 钩子去部署你的 web 应用!
-- 5.访问地址为：http://gitku.cn:8083/你的用户名/你的仓库名/index.html"
+2.修改 etc/sudoers 文件取获取权限，注意这个 sudoers 文件是只读的，怎么打开并保存自行百度
 
-## 图文详情
+/etc/sudoers 文件部分内容如下：
 
-### 找到你的仓库的 web 钩子设置
+> root ALL=(ALL:ALL) ALL
+> </br>
+> apache ALL=(root) NOPASSWD:ALL
 
-![web](img/web1.png)
+添加这一行：apcher ALL=(root) NOPASSWD:ALL，意思是给 apche 用户上 root 权限</br>
+然后 :wq! 强制保存</br>
+**注意 sudoers 这个文件是只读的，具体怎么打开读写并保存看你的情况而定，详细内容可以自行百度解决**
 
-### 按照以下要求填写
+### 判断哪个用户在执行-webhook.php
 
-![web](img/web2.png)
+写一个 userinfo.php,内容如下：
 
-### 点击添加 web 钩子按钮，完成添加
+```
 
-![web](img/web3.png)
+<?php
+    echo shell_exec("id -a");
+?>
 
-### 最后修改你的代码，然后当你 git push 到仓库时就会自动触发 web 钩子帮你部署这个 web 应用
+```
 
-### 访问地址为：http://gitku.cn:8083/你的用户名/你的仓库名/index.html"
+然后打开你的浏览器，输入这个 php 地址，如下图所示，说明是 apche 用户
+![web](../img/web4.png)
 
-### 附上推送日志访问地址：http://47.100.35.33:8080/webhooks/git-webhook.txt
-
-## 2.Git 钩子方法
-
-- 1.创建一个 repo
-- 2.然后放上你的代码
-- 3.向管理员申请 git 钩子,在本的项目中工单管理(issue) 中留下用户名就行
-- 4.打开本项目中 post-receive, 复制所有内容
-- 5.仓库设置 => 管理 Git 钩子 => 编写 post-receive
-- 6.把复制好的内容粘贴到里面, 并且修改用户名，repo，和克隆地址
-- 7.推送你的代码, 当你推送完成的时候就会出发 post-receive 钩子去部署你的 web 应用
-- 8.访问地址为：http://gitku.cn:8083/你的用户名/你的仓库名/index.html"
-
-# 有图有真相
-
-## 首先打开本项目中的 post-receive 并且复制所有内容
-
-![post-receive](img/1.png)
-
-## 要修改的地方如下
-
-![post-receive](img/2.png)
-
-## 找到你的仓库的钩子设置
-
-![post-receive](img/3.png)
-
-## 粘贴内容并且按照要求（图 2）修改并且更新设置
-
-![post-receive](img/4.png)
-
-## 最后修改你的代码，然后当你 git push 到仓库时就会自动触发钩子帮你部署这个 web 应用
-
-## 第一次推送部署成功的 git 的 log 输出应该如下
-
-![log](img/5.png)
-
-## 更新推送部署成功的 git 的 log 输出应该如下
-
-![log](img/6.png)
-
-## 尽情使用吧！
-
-# 补充说明
-
-- 开源本是不易，请君珍惜！
-- 请大家合理使用服务器资源，不要滥用和破坏！谢谢！
-- 有任何问题请发邮件给管理员 2945802136@qq.com
+### 更多疑问，请联系管理员 2945802136@qq.com
